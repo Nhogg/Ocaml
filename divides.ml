@@ -22,3 +22,5 @@ let gcdDiv m n = divides (gcd m n) m
 let gcdGreatestm m  n c = if divides c m && divides c n
 then c <= gcd m n
 else true
+
+
