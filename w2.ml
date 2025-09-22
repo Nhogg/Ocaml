@@ -56,8 +56,6 @@ then  (0, 1)
 else step(minifib (n - 1))
 
 
-let rec fastfib n = let (x, _) = minifib n in x
-
 
 
 
