@@ -56,4 +56,9 @@ let rec append xs ys =
         | [] -> ys
         | x :: xs -> x :: (append xs ys)
 
+let addoStart x xs = x :: xs
 
+let addToEnd xs x =
+        match xs with
+        | [] -> [x]
+        | x :: xs
