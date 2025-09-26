@@ -30,7 +30,30 @@ let rec evalAtAux ps x n =
 
 let evalAt ps x = evalAtAux ps x
 
+let valueAt ps x =
+        let rec aux xn ps =
+                match ps with
+                | [] -> 0.0
+                | p :: ps -> p *. xn +. aux (xn *. x) ps
+        in aux 1.0 ps
 
+let degree ps =
+        let rec aux ps =
+                match ps with
+                | [] -> 0
+                | _ :: ps -> 1 + aux ps
+        in match ps with
+        | [] -> 0
+        | _ :: ps -> aux ps
 
+let rec length xs = 
+        match xs with
+        | [] -> 0
+        | _ :: xs -> 1 + length xs
+
+let rec append xs ys =
+        match xs with
+        | [] -> ys
+        | x :: xs -> x :: (append xs ys)
 
 
