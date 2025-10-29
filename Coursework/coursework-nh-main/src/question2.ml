@@ -29,14 +29,55 @@ let isValidPath m n p =
 (** b. (3 marks) **)
 
 (* history : bool list -> (int * int) list *)
-let history = failwith "Not implemented"
+let history path = 
+        let rec buildHistory (currentX, currentY) remainingPath =
+                match remainingPath with
+                | [] -> [(currentX, currentY)]
+                | h :: t -> 
+                                let (nextX, nextY) =
+                                        if h = true then
+                                                (currentX, currentY + 1)
+                                        else
+                                                (currentX + 1, currentY)
+                                in
+                                let futureHistory = buildHistory (nextX, nextY) t in
+                                (currentX, currentY) :: futureHistory
+        in buildHistory (0, 0) path
+
+
+
+
+
+
 
 (** c. (3 marks) **)
 
 (* turningNumber : bool list -> int *)
-let turningNumber = failwith "Not implemented"
+let rec turningNumber path =
+        match path with
+        | [] -> 0
+        | [x] -> 0
+        | h1 :: h2 :: t ->
+                        let transitionCount = if h1 != h2 then 1 else 0 in
+                        transitionCount + turningNumber (h2 :: t)
 
 (** d. (3 marks) **)
 
 (* allPaths : int -> int -> bool list list *)
-let allPaths = failwith "Not implemented"
+let allPaths m n = 
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
