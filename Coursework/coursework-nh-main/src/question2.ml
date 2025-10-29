@@ -3,7 +3,28 @@
 (** a. (3 marks) **)
 
 (* isValidPath : int -> int -> bool list -> bool *)
-let isValidPath = failwith "Not implemented"
+let isValidPath m n p =
+        let rec walk (currentX, currentY) remainingPath =
+                match remainingPath with
+                | [] -> 
+                        if currentX = n  && currentY = m  then 
+                                true 
+                        else
+                                false
+                | h :: t -> 
+                        if h = true then
+                                let newY = currentY + 1 in 
+                                if newY <= m then 
+                                        walk (currentX, newY) t 
+                                else 
+                                        false 
+                        else
+                                let newX = currentX + 1 in
+                                if newX <= n then 
+                                        walk (newX, currentY) t 
+                                else 
+                                        false
+        in walk (0, 0) p
 
 (** b. (3 marks) **)
 
