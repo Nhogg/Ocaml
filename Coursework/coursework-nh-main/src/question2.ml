@@ -64,8 +64,30 @@ let rec turningNumber path =
 (** d. (3 marks) **)
 
 (* allPaths : int -> int -> bool list list *)
-let allPaths m n = 
-        
+let rec allPaths m n = 
+        let rec prependMove move paths =
+               match paths with
+               | [] -> []
+               | h :: t -> (move :: h) :: (prependMove move t)
+        in
+        match (m, n) with
+        | (0, 0) -> [ [] ]
+        | (m, n) ->
+                        let upPaths =
+                                if m > 0 then
+                                        let pathsFromAbove = allPaths (m - 1) n in
+                                        prependMove true pathsFromAbove
+                                else
+                                        []
+                        in
+                        let rightPaths =
+                                if n > 0 then
+                                        let pathsFromLeft = allPaths m (n - 1) in
+                                        prependMove false pathsFromLeft
+                                else
+                                        []
+                        in
+                        upPaths @ rightPaths
 
 
 
