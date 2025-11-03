@@ -4,7 +4,7 @@
 type 'a tree = Lf (* Leaf *)
         | Br of 'a * 'a tree * 'a tree (* Branch *)
 
-(* SIze *)
+(* Size *)
 let rec size t =
         match t with
         | Lf -> 0
@@ -24,5 +24,66 @@ let rec flatten t =
         match t with
         | Lf -> []
         | Br (v, t1, t2) -> append (flatten t1) (v :: flatten t2)
+
+let rec memberBst x t =
+        match t with
+        | Lf -> false
+        | Br (v, t1, t2) -> if x = v 
+                            then true
+                            else if x < v
+                            then memberBst x t1
+                            else memberBst x t2
+
+let rec add x t =
+        match t with
+        | Lf -> Br (x, Lf, Lf)
+        | Br (v, t1, t2) -> if x <= v
+                            then Br (v, add x t1, t2)
+                            else Br (v, t1, add x t2)
+
+let rec toTree xs =
+        match xs with
+        | [] -> Lf
+        | y :: ys -> add y (toTree ys)
+
+let treeSort xs = flatten (toTree xs)
+
+(* Exercises *)
+
+(* 1 *)
+let rec sumT tree = 
+        match tree with
+        | Lf -> 0
+        | Br (v, t1, t2) -> v + sumT t1 + sumT t2
+
+(* 2 *)
+let rec mirror tree = 
+        match tree with
+        | Lf -> Lf
+        | Br (v, t1, t2) -> Br (v, mirror t1, mirror t2)
+
+let rec member value tree =
+        match tree with
+        | Lf -> false
+        | Br (v, t1, t2) -> if v = value
+                            then true
+                            else if v < value then
+                                    member value t1
+                            else
+                                    member value t2
+
+let rec mapT func tree =
+        match tree with
+        | Lf -> Lf
+        | Br (v, t1, t2) -> Br (func v, mapT func t1, mapT func t2)
+
+
+
+
+
+
+
+
+
 
 
