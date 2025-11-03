@@ -1,43 +1,84 @@
-let f x y = x + y * y
-
-let g = fun x y -> x + y * y
-
-let g x y z = x + 2 * y + 3 * z
-
-let rec add1 xs = match xs with
+let rec small x ys =
+        match ys with
         | [] -> []
-        | x :: xs -> (x + 1) :: add1 xs
-
-let rec add2 xs = match xs with
+        | y :: ys -> if y < x
+                     then y :: small x ys
+                     else small x ys
+        
+let rec large x ys =
+        match ys with
         | [] -> []
-        | x :: xs -> (x + 2) :: add2 xs
+        | y :: ys -> if x <= y
+                     then y :: large x ys
+                     else large x ys
 
-let rec addN n xs = match xs with
+let rec append xs ys =
+        match xs with
+        | [] -> ys
+        | x :: xs -> x :: (append xs ys)
+
+let rec qsort xs =
+        match xs with
         | [] -> []
-        | x :: xs -> (((+) n) x) :: addN n xs
+        | x :: xs -> let s = qsort (small x xs) in
+                     let l = qsort (large x xs) in
+                     append s (x :: l)
 
-let rec mulN n xs = match xs with
+let rec filter p xs =
+        match xs with
         | [] -> []
-        | x ::xs -> ((( * ) n) x) :: mulN n xs
+        | x :: xs -> if p x
+                     then x :: filter p xs
+                     else filter p xs
 
-let length xs = 
-        let rec auxlen xs accum =
-                match xs with
-                | [] -> []
-                | x :: xs -> auxlen xs (accum + 1)
-        in auxlen xs 0
-
-let rec applylen xs = match xs with
+let rec map f xs =
+        match xs with
         | [] -> []
-        | x :: xs -> (length x) :: applylen xs
+        | x :: xs -> f x :: map f xs
 
-let rec map f xs = match xs with
+let rec foldRight v f xs =
+        match xs with
+        | [] -> v
+        | x :: xs -> f x (foldRight v f xs)
+
+let rec foldLeft v f xs =
+        match xs with
+        | [] -> v
+        | x :: xs -> foldLeft (f v x) f xs
+
+(* Exercises *)
+
+let rec squaresOfOdds numList =
+        match numList with
         | [] -> []
-        | x :: xs -> (f x) :: map f xs
+        | x :: xs -> if (x mod 2 != 0) then x * x :: squaresOfOdds xs
+                     else squaresOfOdds xs
 
-let addN n xs = map ((+) n) xs
-let mulN n xs = map (( * ) n) xs
+let rec takeWhile func list =
+        match list with
+        | [] -> []
+        | x :: xs ->
+                        if func x then
+                                x :: (takeWhile func xs)
+                        else
+                                []
 
+let rec multiMap funList args =
+        match funList, args with
+        | [], [] -> []
+        | x :: xs, y :: ys ->
+                        x y :: multiMap xs ys
+
+let rec applyN numTimes func value =
+        if numTimes > 0 then
+                (func value) + applyN (numTimes - 1) func value
+        else 0
+
+                        
+
+
+
+        
 
 
 
