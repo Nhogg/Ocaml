@@ -41,8 +41,6 @@ let rec add x t =
                             then Br (v, add x t1, t2)
                             else Br (v, t1, add x t2)
 
-let rec toTree xs =
-        match xs with
         | [] -> Lf
         | y :: ys -> add y (toTree ys)
 
@@ -77,13 +75,40 @@ let rec mapT func tree =
         | Lf -> Lf
         | Br (v, t1, t2) -> Br (func v, mapT func t1, mapT func t2)
 
+let rec dftFast tree =
+        let rec dftAux tree accum =
+               match tree with
+               | Lf -> accum
+               | Br (v, t1, t2) -> v :: (dftAux t1 (dftAux t2 accum)) 
+        in
+        dftAux tree []
 
+let rec isBst tree =
+        let rec aux tree min max =
+                match tree with
+                | Lf -> true
+                | Br (v, t1, t2) ->
+                                let withinBounds =
+                                        (match min with
+                                        | None -> true
+                                        | Some minv -> v > minv)
+                                        &&
+                                        (match max with
+                                        | None -> true
+                                        | Some maxv -> v < maxv)
+                                in
+                                withinBounds
+                                && aux t1 min (Some v)
+                                && aux t2 (Some v) max
+        in
+        aux tree None None
 
-
-
-
-
-
-
+let rec isAlmostList tree =
+        match tree with
+        | Lf -> true
+        | Br (_, Lf, Lf) -> true
+        | Br (_, Lf, r) -> isAlmostList r
+        | Br (_, l, Lf) -> isAlmostList l 
+        | Br (_, l, r) -> false
 
 
