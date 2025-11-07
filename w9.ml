@@ -16,6 +16,7 @@ let rec printAExp ae =
 
 let parens s = "(" ^ s ^ ")"
 
+(* This implmentation supports paranthesis *)
 let rec printAExp ae =
          match ae with
          | Num n -> Int.to_string n
@@ -145,6 +146,51 @@ and mapFT f ts =
         match ts with
         | [] -> []
         | t :: ts -> mapRT f t :: mapFT f ts
+
+
+(* Exercises *)
+(* 1 *)
+let rec numLits algExp =
+        match algExp with
+        | Num n -> 1
+        | Sum (aexp1, aexp2) -> numLits aexp1 + numLits aexp2
+        | Prod (aexp1, aexp2) -> numLits aexp1 + numLits aexp2
+        | Neg (aexp) -> numLits aexp
+
+let rec mulDepth algExp =
+        match algExp with
+        | Num n -> 0
+        | Neg a -> mulDepth a
+        | Sum (aexp1, aexp2) -> (mulDepth aexp1) + (mulDepth aexp2)
+        | Prod (aexp1, aexp2) -> 1 + (mulDepth aexp1) + (mulDepth aexp2)
+
+(* 2 *)
+type var = string
+type aexp = Var of var
+         | Num of int
+         | Neg of aexp
+         | Sum of aexp * aexp
+         | Prod of aexp * aexp
+
+let rec printAExp ae =
+        match ae with
+        | Num n -> Int.to_string n
+        | Sum (e1, e2) -> printAExp e1 ^ " + " ^ printAExp e2
+        | Prod (e1, e2) -> printAExp e1 ^ " * " ^ printAExp e2
+        | Neg e -> " - " ^ printAExp e
+
+let rec printAexp ae =
+        match ae with
+        | Num n -> n
+        | Sum (e1, e2) -> printAexp e1 ^ " + " ^ printAexp e2
+
+
+
+
+
+
+
+
 
 
 
