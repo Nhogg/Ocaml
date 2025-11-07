@@ -104,3 +104,49 @@ let c1 =
           match e with
           | Par _ -> []
           | Sec (t, ct) -> (prefix ^ " " ^ t) :: tocC (increase prefix) ct
+
+(* Since content is just a list of elements, we can redefine the constructor *)
+type elt = Par of string | Sec of string * elt list
+type doc = string * string * elt list
+
+let rec concatMap f xs =
+        match xs with
+        | [] -> []
+        | x :: xs -> append (f x) (concatMap f xs)
+
+let rec tocE prefix e =
+        match e with
+        | Par _ -> []
+        | Sec (t, es) -> (prefix ^ t) :: concatMap (tocE (increase prefix)) es
+
+let toc (_, _, es) = concatMap (tocE "# ") es
+
+(* Rose Trees *)
+type 'a rosetree = Node of 'a * 'a rosetree list
+
+type 'a rtree = NodeT of 'a * 'a forest
+and 'a forest = Empty | Trees of 'a rtree * 'a forest
+
+(* Mapping over trees *)
+
+(* Binary trees *)
+type 'a tree = Lf | Br of 'a * 'a tree * 'a tree
+
+let rec mapT f t =
+        match t with
+        | Lf -> Lf
+        | Br (x, lt, rt) -> Br (f x, mapT f lt, mapT f rt)
+
+(* Rose trees *)
+let rec mapRT f t = 
+        match t with
+        | Node (x, ts) -> Node (x, map (mapRT f) ts)
+and mapFT f ts =
+        match ts with
+        | [] -> []
+        | t :: ts -> mapRT f t :: mapFT f ts
+
+
+
+
+
